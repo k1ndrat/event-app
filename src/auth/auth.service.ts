@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { hash, compare } from 'bcrypt';
+import { compare } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from './interfaces/jwt.interface';
 import { JwtService } from '@nestjs/jwt';
