@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { EventService } from './event.service';
@@ -17,6 +18,7 @@ import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { Types } from 'mongoose';
 import { IdValidationPipe } from 'src/pipes/id.validation.pipe';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { GetEventsDto } from './dto/get-events.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('event')
@@ -29,20 +31,20 @@ export class EventController {
   }
 
   @Get()
-  async findAll() {
-    return this.eventService.findAll();
-  }
-
-  @Get('organizer')
-  async findByOrganizerId(@GetUser('_id') organizerId: Types.ObjectId) {
-    return this.eventService.findByOrganizerId(organizerId);
-  }
-
-  @Get('/:attendeeId/attendee')
-  async findByAttendeeId(
-    @Param('attendeeId', IdValidationPipe) attendeeId: Types.ObjectId,
-  ) {
-    return this.eventService.findByAttendeeId(attendeeId);
+  async findAll(@Query() query: GetEventsDto) {
+    return this.eventService.findAll(
+      query.page,
+      query.limit,
+      query.sortBy,
+      query.desc,
+      {
+        status: query.status,
+        type: query.type,
+        search: query.search,
+        organizerId: query.organizerId,
+        attendeeId: query.attendeeId,
+      },
+    );
   }
 
   @Get(':id')
@@ -69,6 +71,7 @@ export class EventController {
   }
 
   @Patch(':id')
+  @HttpCode(HttpStatus.OK)
   async updateEvent(
     @Param('id', IdValidationPipe) eventId: Types.ObjectId,
     @Body() dto: UpdateEventDto,

@@ -11,7 +11,7 @@ import {
   MinLength,
   ValidateIf,
 } from 'class-validator';
-import { EventType } from 'src/common/enums';
+import { EEventType } from 'src/common/enums';
 
 export class CreateEventDto {
   @IsString()
@@ -30,15 +30,15 @@ export class CreateEventDto {
   @Type(() => Date)
   date: Date;
 
-  @IsEnum(EventType)
-  type: EventType;
+  @IsEnum(EEventType)
+  type: EEventType;
 
-  @ValidateIf((o) => o.type === EventType.OFFLINE)
+  @ValidateIf((o) => o.type === EEventType.OFFLINE)
   @IsString()
   @IsNotEmpty({ message: 'Location is required for offline events' })
   location: string;
 
-  @ValidateIf((o) => o.type === EventType.ONLINE)
+  @ValidateIf((o) => o.type === EEventType.ONLINE)
   @IsString()
   @IsNotEmpty({ message: 'Link is required for online events' })
   @IsUrl()

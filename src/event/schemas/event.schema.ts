@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Types } from 'mongoose';
-import { EventType } from 'src/common/enums';
+import { EEventType } from 'src/common/enums';
 
 export type EventDocument = HydratedDocument<Event>;
 
@@ -18,7 +18,7 @@ export class Event {
   date: Date;
 
   @Prop({ required: true })
-  type: EventType;
+  type: EEventType;
 
   @Prop({})
   location: string;

@@ -8,6 +8,7 @@ import { Model, Types } from 'mongoose';
 import { CreateEventDto } from './dto/create-event.dto';
 import { Event } from './schemas/event.schema';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { EEventFilterStatus, EEventSortBy, EEventType } from 'src/common/enums';
 
 @Injectable()
 export class EventService {
@@ -18,8 +19,69 @@ export class EventService {
     return createdEvent.save();
   }
 
-  async findAll(): Promise<Event[]> {
-    return this.eventModel.find().lean();
+  async findAll(
+    page: number = 1,
+    limit: number = 10,
+    sortBy: EEventSortBy = EEventSortBy.EVENT_DATE,
+    desc: boolean = false,
+    filter: {
+      status?: EEventFilterStatus;
+      type?: EEventType;
+      search?: string;
+      organizerId?: Types.ObjectId;
+      attendeeId?: Types.ObjectId;
+    } = {},
+  ) {
+    const skip = (page - 1) * limit;
+    const mongoQuery: any = {};
+    const now = new Date();
+
+    if (filter.organizerId) {
+      mongoQuery.organizerId = filter.organizerId;
+    }
+
+    if (filter.attendeeId) {
+      mongoQuery.attendeesIDs = filter.attendeeId;
+    }
+
+    if (filter.search) {
+      mongoQuery.name = { $regex: filter.search.trim(), $options: 'i' };
+    }
+
+    if (filter.status === EEventFilterStatus.UPCOMING) {
+      mongoQuery.date = { $gte: now };
+    } else if (filter.status === EEventFilterStatus.PAST) {
+      mongoQuery.date = { $lt: now };
+    }
+
+    if (filter.type) {
+      mongoQuery.type = filter.type;
+    }
+
+    const sortOptions = { [sortBy]: desc ? -1 : 1 };
+
+    const [events, total] = await Promise.all([
+      this.eventModel
+        .find(mongoQuery)
+        .sort(sortOptions as any)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      this.eventModel.countDocuments(mongoQuery),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: events,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNextPage: page < totalPages,
+      },
+    };
   }
 
   async findById(id: Types.ObjectId): Promise<Event> {
@@ -28,14 +90,6 @@ export class EventService {
       throw new NotFoundException('Event not found');
     }
     return event;
-  }
-
-  async findByOrganizerId(organizerId: Types.ObjectId): Promise<Event[]> {
-    return this.eventModel.find({ organizerId }).lean();
-  }
-
-  async findByAttendeeId(attendeeId: Types.ObjectId): Promise<Event[]> {
-    return this.eventModel.find({ attendeesIDs: attendeeId }).lean();
   }
 
   async addAttendee(
