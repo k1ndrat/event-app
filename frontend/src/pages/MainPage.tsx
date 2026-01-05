@@ -3,7 +3,6 @@ import { useLogout } from "../hooks/useAuth";
 
 export const MainPage = () => {
   const { user } = useAuthStore();
-
   const { mutate: logout, isPending } = useLogout();
 
   if (!user) {

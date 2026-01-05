@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-import "./App.css";
 import AppRouter from "./routes/AppRouter";
 import { useAuthStore } from "./store/auth.store";
 import { Loader } from "./components/Loader/Loader";
+import { SidebarProvider } from "./components/ui/sidebar";
+import { AppSidebar } from "./layouts/Sidebar";
 
 function App() {
-  const { isLoading, checkAuth } = useAuthStore();
+  const { isLoading, checkAuth, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     checkAuth();
@@ -14,7 +15,14 @@ function App() {
   return (
     <div className="App">
       <main>
-        <AppRouter />
+        {isAuthenticated ? (
+          <SidebarProvider>
+            <AppSidebar />
+            <AppRouter />
+          </SidebarProvider>
+        ) : (
+          <AppRouter />
+        )}
       </main>
 
       <Loader isVisible={isLoading} />

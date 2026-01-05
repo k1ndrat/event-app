@@ -1,5 +1,5 @@
 import { LoginPage } from "../pages/LoginPage";
-import { SignupPage } from "../pages/SignupPage";
+import { SignUpPage } from "../pages/SignupPage";
 import type { TRoute } from "../types";
 
 export enum EGuestRoutes {
@@ -15,7 +15,7 @@ export const GuestPaths: Record<EGuestRoutes, string> = {
 export const GuestRoutes: Record<EGuestRoutes, TRoute> = {
   [EGuestRoutes.SIGNUP]: {
     path: GuestPaths[EGuestRoutes.SIGNUP],
-    component: <SignupPage />,
+    component: <SignUpPage />,
   },
   [EGuestRoutes.LOGIN]: {
     path: GuestPaths[EGuestRoutes.LOGIN],

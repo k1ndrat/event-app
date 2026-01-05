@@ -1,3 +1,5 @@
+import { Spinner } from "../ui/spinner";
+
 export const Loader = ({ isVisible }: { isVisible: boolean }) => {
   if (!isVisible) return null;
 
@@ -9,16 +11,14 @@ export const Loader = ({ isVisible }: { isVisible: boolean }) => {
         left: 0,
         width: "100%",
         height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        backgroundColor: "rgba(0, 0, 0, 0)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        color: "#fff",
-        fontSize: "1.5rem",
         zIndex: 1000,
       }}
     >
-      Loading...
+      <Spinner className="size-12 text-purple-500" />
     </div>
   );
 };
