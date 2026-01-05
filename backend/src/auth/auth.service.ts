@@ -122,7 +122,7 @@ export class AuthService {
       domain: 'localhost',
       expires,
       secure: false,
-      sameSite: 'none',
+      sameSite: 'lax',
     });
   }
 }
