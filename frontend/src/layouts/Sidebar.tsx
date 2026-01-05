@@ -2,9 +2,7 @@ import {
   Calendar,
   ChevronUp,
   Home,
-  Inbox,
   PanelLeft,
-  Search,
   Settings,
   User2,
 } from "lucide-react";
