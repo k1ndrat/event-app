@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import type { EEventType } from "./common/enums";
+import type { EEventFilterStatus, EEventType } from "./common/enums";
 
 export type TUser = {
   _id: string;
@@ -63,7 +63,7 @@ export type TGetEventsParams = {
   sortBy?: string;
   desc?: boolean;
   status?: string;
-  type?: string;
+  type?: EEventType;
   search?: string;
   organizerId?: string;
   attendeeId?: string;
@@ -85,3 +85,9 @@ export type TCreateEventPayload = Omit<
   "_id" | "createdAt" | "updatedAt" | "attendeesIDs" | "organizerId"
 >;
 export type TUpdateEventPayload = Partial<TCreateEventPayload>;
+
+export type TEventFilters = {
+  search: string;
+  type: "all" | EEventType;
+  status: "all" | EEventFilterStatus;
+};
