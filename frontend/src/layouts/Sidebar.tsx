@@ -43,7 +43,7 @@ const items = [
   },
   {
     title: "Settings",
-    url: "/settings",
+    url: AdminPaths.settings,
     icon: Settings,
   },
 ];

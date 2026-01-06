@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Spinner } from "./ui/spinner";
+import { LoaderPinwheel } from "lucide-react";
 
 type TProps = {
   isVisible: boolean;
@@ -23,7 +23,7 @@ export const Loader: FC<TProps> = ({ isVisible }) => {
         zIndex: 1000,
       }}
     >
-      <Spinner className="size-12 text-purple-500" />
+      <LoaderPinwheel className="size-12 animate-spin" />
     </div>
   );
 };

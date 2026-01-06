@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { eventService } from "../services/event.service";
 import type {
   TGetEventsParams,
@@ -9,12 +14,29 @@ import type {
 } from "../types";
 import type { AxiosError } from "axios";
 
-export const useEvents = (params: TGetEventsParams) => {
-  return useQuery<TEventsResponse, AxiosError<TBackendErrorResponse>>({
-    queryKey: ["events", params],
-    queryFn: () => eventService.getAll(params),
+export const useInfiniteEvents = (params: TGetEventsParams) => {
+  return useInfiniteQuery<TEventsResponse, AxiosError<TBackendErrorResponse>>({
+    queryKey: ["events", "infinite", params],
+    queryFn: ({ pageParam = 1 }) =>
+      eventService.getAll({ ...params, page: pageParam as number }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.meta.hasNextPage) {
+        return lastPage.meta.page + 1;
+      }
+      return undefined;
+    },
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
   });
 };
+
+// export const useEvents = (params: TGetEventsParams) => {
+//   return useQuery<TEventsResponse, AxiosError<TBackendErrorResponse>>({
+//     queryKey: ["events", params],
+//     queryFn: () => eventService.getAll(params),
+//   });
+// };
 
 export const useEvent = (id: string) => {
   return useQuery({
