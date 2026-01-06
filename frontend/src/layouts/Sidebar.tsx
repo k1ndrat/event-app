@@ -27,21 +27,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/store/auth.store";
 import { useLogout } from "@/hooks/useAuth";
+import { AdminPaths } from "@/routes/AdminRoutes";
+import { Link } from "react-router-dom";
 
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: AdminPaths.main,
     icon: Home,
   },
   {
     title: "My Events",
-    url: "#",
+    url: "/my-events",
     icon: Calendar,
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/settings",
     icon: Settings,
   },
 ];
@@ -81,10 +83,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

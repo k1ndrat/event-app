@@ -1,14 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "../services/auth.service";
-import type { TAuthResponse, TLoginPayload, TRegisterPayload } from "../types";
+import type {
+  TAuthResponse,
+  TBackendErrorResponse,
+  TLoginPayload,
+  TRegisterPayload,
+} from "../types";
 import { useAuthStore } from "../store/auth.store";
 import type { AxiosError } from "axios";
-
-type TBackendErrorResponse = {
-  message: string | string[];
-  error: string;
-  statusCode: number;
-};
 
 export const useLogin = () => {
   const { loginSuccess } = useAuthStore();

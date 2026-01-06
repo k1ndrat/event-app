@@ -1,59 +1,34 @@
-import { useAuthStore } from "../store/auth.store";
-import { useLogout } from "../hooks/useAuth";
+import { EventList } from "@/components/events/EventList";
+import { useEvents } from "@/hooks/useEvent";
+import { Breadcrumbs } from "@/layouts/Breadcrumbs";
+import { Loader2 } from "lucide-react";
 
 export const MainPage = () => {
-  const { user } = useAuthStore();
-  const { mutate: logout, isPending } = useLogout();
-
-  if (!user) {
-    return null;
-  }
+  const { data, isLoading, error } = useEvents({
+    page: 1,
+    limit: 10,
+  });
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>Main page</h1>
+    <div
+      style={{ padding: "2rem", fontFamily: "sans-serif" }}
+      className="max-w-300 w-full"
+    >
+      <Breadcrumbs />
 
-      <div
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "1.5rem",
-          maxWidth: "400px",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <h2>Hello, {user.name}! 👋</h2>
-
-        <p>
-          <strong>Email:</strong> {user.email}
-        </p>
-        <p>
-          <strong>ID:</strong>{" "}
-          <code style={{ background: "#000", padding: "2px 4px" }}>
-            {user._id}
-          </code>
-        </p>
-        <p>
-          <strong>CreatedAt:</strong>{" "}
-          {new Date(user.createdAt).toLocaleDateString()}
-        </p>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Events</h1>
+        <span className="text-sm text-muted-foreground flex items-center gap-2">
+          {!error && "Found: "}
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            data?.data.length
+          )}
+        </span>
       </div>
 
-      <button
-        onClick={() => logout()}
-        disabled={isPending}
-        style={{
-          padding: "10px 20px",
-          cursor: "pointer",
-          backgroundColor: isPending ? "#ccc" : "#ff4d4f",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          fontSize: "16px",
-        }}
-      >
-        {isPending ? "Logging out..." : "Log out"}
-      </button>
+      <EventList data={data} isLoading={isLoading} error={error} />
     </div>
   );
 };
