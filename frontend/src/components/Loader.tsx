@@ -1,6 +1,11 @@
-import { Spinner } from "../ui/spinner";
+import type { FC } from "react";
+import { Spinner } from "./ui/spinner";
 
-export const Loader = ({ isVisible }: { isVisible: boolean }) => {
+type TProps = {
+  isVisible: boolean;
+};
+
+export const Loader: FC<TProps> = ({ isVisible }) => {
   if (!isVisible) return null;
 
   return (

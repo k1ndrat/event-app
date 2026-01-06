@@ -2,9 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
-import { Link } from "react-router-dom";
-
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useLogin } from "../hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,16 +14,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Card, CardContent } from "@/components/ui/card";
 import { GuestPaths } from "@/routes/GuestRoutes";
+import { AuthHeader } from "@/components/auth/Header";
+import { AuthFooter } from "@/components/auth/Footer";
+import { AlertMessage } from "@/components/AlertMessage";
 
 const formSchema = z.object({
   email: z.email({ message: "Invalid email address" }),
@@ -61,23 +54,13 @@ export const LoginPage = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <Card className="w-full max-w-md shadow-lg">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            Login to account
-          </CardTitle>
-          <CardDescription className="text-center">
-            Enter your credentials to access the admin panel
-          </CardDescription>
-        </CardHeader>
+        <AuthHeader
+          title="Login to account"
+          description="Enter your credentials to access the admin panel"
+        />
 
         <CardContent>
-          {isError && (
-            <Alert variant="destructive" className="mb-6">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{errorMessage}</AlertDescription>
-            </Alert>
-          )}
+          {isError && <AlertMessage errorMessage={errorMessage} />}
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -146,17 +129,11 @@ export const LoginPage = () => {
           </Form>
         </CardContent>
 
-        <CardFooter className="flex justify-center">
-          <p className="text-sm text-muted-foreground">
-            Don't have an account?{" "}
-            <Link
-              to={GuestPaths.Signup}
-              className="text-primary hover:underline font-medium"
-            >
-              Sign Up
-            </Link>
-          </p>
-        </CardFooter>
+        <AuthFooter
+          title="Don't have an account?"
+          link={GuestPaths.Signup}
+          linkLabel="Sign Up"
+        />
       </Card>
     </div>
   );
