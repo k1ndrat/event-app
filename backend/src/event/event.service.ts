@@ -58,7 +58,10 @@ export class EventService {
       mongoQuery.type = filter.type;
     }
 
-    const sortOptions = { [sortBy]: desc ? -1 : 1 };
+    const sortOptions = {
+      [sortBy]: desc ? -1 : 1,
+      _id: -1,
+    };
 
     const [events, total] = await Promise.all([
       this.eventModel

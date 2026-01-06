@@ -46,7 +46,7 @@ export class UpdateEventDto {
   @ValidateIf((o) => o.type === EEventType.ONLINE)
   @IsString()
   @IsNotEmpty({ message: 'Link is required for online events' })
-  @IsUrl()
+  @IsUrl({ require_protocol: true })
   link: string;
 
   @IsOptional()
