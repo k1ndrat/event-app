@@ -1,5 +1,4 @@
-import type { TEvent } from "@/types";
-import type { FC } from "react";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -7,33 +6,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { getEventStatuses, getFormattedDate } from "@/lib/events";
+import { AdminPaths } from "@/routes/AdminRoutes";
+import type { TEvent } from "@/types";
 import {
+  Archive,
   Calendar,
+  Clock,
+  Link as LinkIcon,
   MapPin,
   Users,
-  Link as LinkIcon,
-  Clock,
-  Archive,
 } from "lucide-react";
+import type { FC } from "react";
+import { useNavigate } from "react-router-dom";
 
 type TProps = {
   event: TEvent;
 };
 
 export const EventCard: FC<TProps> = ({ event }) => {
-  const eventDate = new Date(event.date);
-  const isPast = eventDate < new Date();
+  const navigate = useNavigate();
 
-  const date = eventDate.toLocaleString("en-US", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  const isFull = event.attendeesIDs.length >= event.maxAttendees;
+  const formattedDate = getFormattedDate(event.date);
+  const { isFull, isPast } = getEventStatuses(event, null);
 
   return (
     <Card
@@ -45,6 +40,9 @@ export const EventCard: FC<TProps> = ({ event }) => {
             : "bg-card hover:shadow-lg"
         }
       `}
+      onClick={() =>
+        navigate(AdminPaths.event_details.replace(":id", event._id))
+      }
     >
       <div
         className={`h-2 ${isPast ? "bg-muted-foreground/40" : "bg-primary/80"}`}
@@ -88,7 +86,13 @@ export const EventCard: FC<TProps> = ({ event }) => {
         <div className="space-y-2">
           <div className="flex items-center text-sm">
             <Calendar className="mr-2 h-4 w-4 text-primary" />
-            <span>{date}</span>
+            <span
+              className={`${
+                isPast ? "line-through text-muted-foreground" : ""
+              }`}
+            >
+              {formattedDate}
+            </span>
           </div>
 
           {event.location && (
@@ -106,6 +110,7 @@ export const EventCard: FC<TProps> = ({ event }) => {
                 target="_blank"
                 rel="noreferrer"
                 className="truncate"
+                onClick={(e) => e.stopPropagation()}
               >
                 Link to the event
               </a>

@@ -1,12 +1,12 @@
-import { useEffect, type FC } from "react";
-import type { AxiosError } from "axios";
 import type { TBackendErrorResponse, TEvent } from "@/types";
+import type { AxiosError } from "axios";
+import { CalendarX, LoaderPinwheel } from "lucide-react";
+import { useEffect, type FC } from "react";
+import { useInView } from "react-intersection-observer";
+import { EmptyState } from "../EmptyState";
+import { ErrorState } from "../ErrorState";
 import { EventCard } from "./EventCard";
 import { EventCardSkeleton } from "./EventCardSkeleton";
-import { EmptyState } from "../EmptyState";
-import { CalendarX, LoaderPinwheel } from "lucide-react";
-import { ErrorState } from "../ErrorState";
-import { useInView } from "react-intersection-observer";
 
 type TProps = {
   data?: TEvent[];
@@ -49,7 +49,7 @@ export const EventList: FC<TProps> = ({
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(330px,1fr))] gap-6">
         {data?.map((event) => (
           <EventCard key={event._id} event={event} />
         ))}

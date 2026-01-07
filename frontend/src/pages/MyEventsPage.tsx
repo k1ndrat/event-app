@@ -34,10 +34,7 @@ export const MyEventsPage = () => {
   });
 
   return (
-    <div
-      style={{ padding: "2rem", fontFamily: "sans-serif" }}
-      className="max-w-300 w-full"
-    >
+    <div className="max-w-300 w-full p-8 font-[sans-serif]">
       <Breadcrumbs items={[{ title: "My Events" }]} />
 
       <div className="flex items-center justify-between mb-8">

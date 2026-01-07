@@ -39,10 +39,12 @@ export const useEvents = (params: TGetEventsParams) => {
 };
 
 export const useEvent = (id: string) => {
-  return useQuery({
+  return useQuery<TEvent, AxiosError<TBackendErrorResponse>>({
     queryKey: ["events", id],
     queryFn: () => eventService.getById(id),
     enabled: !!id,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
   });
 };
 
@@ -66,6 +68,17 @@ export const useAttendEvent = () => {
 
   return useMutation<TEvent, AxiosError<TBackendErrorResponse>, string>({
     mutationFn: (id) => eventService.attend(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+  });
+};
+
+export const useLeaveEvent = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<TEvent, AxiosError<TBackendErrorResponse>, string>({
+    mutationFn: (id) => eventService.unattend(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
     },
