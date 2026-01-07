@@ -38,7 +38,7 @@ const items = [
   },
   {
     title: "My Events",
-    url: "/my-events",
+    url: AdminPaths.my_events,
     icon: Calendar,
   },
   {

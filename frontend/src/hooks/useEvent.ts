@@ -31,12 +31,12 @@ export const useInfiniteEvents = (params: TGetEventsParams) => {
   });
 };
 
-// export const useEvents = (params: TGetEventsParams) => {
-//   return useQuery<TEventsResponse, AxiosError<TBackendErrorResponse>>({
-//     queryKey: ["events", params],
-//     queryFn: () => eventService.getAll(params),
-//   });
-// };
+export const useEvents = (params: TGetEventsParams) => {
+  return useQuery<TEventsResponse, AxiosError<TBackendErrorResponse>>({
+    queryKey: ["events", params],
+    queryFn: () => eventService.getAll(params),
+  });
+};
 
 export const useEvent = (id: string) => {
   return useQuery({
