@@ -1,16 +1,19 @@
 import { MyEventsPage } from "@/pages/MyEventsPage";
 import { MainPage } from "../pages/MainPage";
 import type { TRoute } from "../types";
+import { RegisteredEventsPage } from "@/pages/RegisteredEventsPage";
 
 export enum EAdminRoutes {
   MAIN = "main",
   MY_EVENTS = "my_events",
+  REGISTERED_EVENTS = "registered_events",
   SETTINGS = "settings",
 }
 
 export const AdminPaths: Record<EAdminRoutes, string> = {
   [EAdminRoutes.MAIN]: "/",
   [EAdminRoutes.MY_EVENTS]: "/my-events",
+  [EAdminRoutes.REGISTERED_EVENTS]: "/registered-events",
   [EAdminRoutes.SETTINGS]: "/settings",
 };
 
@@ -22,6 +25,10 @@ export const AdminRoutes: Record<EAdminRoutes, TRoute> = {
   [EAdminRoutes.MY_EVENTS]: {
     path: AdminPaths[EAdminRoutes.MY_EVENTS],
     component: <MyEventsPage />,
+  },
+  [EAdminRoutes.REGISTERED_EVENTS]: {
+    path: AdminPaths[EAdminRoutes.REGISTERED_EVENTS],
+    component: <RegisteredEventsPage />,
   },
   [EAdminRoutes.SETTINGS]: {
     path: AdminPaths[EAdminRoutes.SETTINGS],

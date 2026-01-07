@@ -1,5 +1,6 @@
 import {
   Calendar,
+  CalendarCheck,
   ChevronUp,
   Home,
   PanelLeft,
@@ -28,7 +29,7 @@ import {
 import { useAuthStore } from "@/store/auth.store";
 import { useLogout } from "@/hooks/useAuth";
 import { AdminPaths } from "@/routes/AdminRoutes";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const items = [
   {
@@ -42,6 +43,11 @@ const items = [
     icon: Calendar,
   },
   {
+    title: "Registered Events",
+    url: AdminPaths.registered_events,
+    icon: CalendarCheck,
+  },
+  {
     title: "Settings",
     url: AdminPaths.settings,
     icon: Settings,
@@ -52,6 +58,8 @@ export function AppSidebar() {
   const { user } = useAuthStore();
   const { mutate: logout, isPending } = useLogout();
   const { toggleSidebar } = useSidebar();
+
+  const location = useLocation();
 
   if (!user) {
     return null;
@@ -82,7 +90,10 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={location.pathname === item.url}
+                  >
                     <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
