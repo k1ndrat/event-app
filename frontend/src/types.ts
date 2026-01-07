@@ -1,5 +1,9 @@
 import type { JSX } from "react";
-import type { EEventFilterStatus, EEventType } from "./common/enums";
+import type {
+  EEventFilterStatus,
+  EEventSortBy,
+  EEventType,
+} from "./common/enums";
 
 export type TUser = {
   _id: string;
@@ -60,7 +64,7 @@ export type TEvent = {
 export type TGetEventsParams = {
   page?: number;
   limit?: number;
-  sortBy?: string;
+  sortBy?: EEventSortBy;
   desc?: boolean;
   status?: string;
   type?: EEventType;
@@ -90,4 +94,6 @@ export type TEventFilters = {
   search: string;
   type: "all" | EEventType;
   status: "all" | EEventFilterStatus;
+  sortBy: EEventSortBy;
+  desc: boolean;
 };

@@ -1,4 +1,4 @@
-import { EEventFilterStatus } from "@/common/enums";
+import { defaultEventFilters } from "@/common/constants";
 import { EventFilters } from "@/components/events/EventFilters";
 import { EventList } from "@/components/events/EventList";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -8,11 +8,7 @@ import type { TEventFilters } from "@/types";
 import { useState } from "react";
 
 export const MainPage = () => {
-  const [filters, setFilters] = useState<TEventFilters>({
-    search: "",
-    type: "all",
-    status: EEventFilterStatus.UPCOMING,
-  });
+  const [filters, setFilters] = useState<TEventFilters>(defaultEventFilters);
 
   const debouncedSearch = useDebounce(filters.search, 500);
 
@@ -28,6 +24,8 @@ export const MainPage = () => {
     search: debouncedSearch,
     type: filters.type === "all" ? undefined : filters.type,
     status: filters.status === "all" ? undefined : filters.status,
+    desc: filters.desc,
+    sortBy: filters.sortBy,
   });
 
   return (
