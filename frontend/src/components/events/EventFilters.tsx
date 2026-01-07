@@ -1,3 +1,4 @@
+import { EEventFilterStatus, EEventType } from "@/common/enums";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -6,12 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { TEventFilters } from "@/types";
+import { Tabs, TabsList } from "@radix-ui/react-tabs";
 import { Search, X } from "lucide-react";
 import { Button } from "../ui/button";
-import { EEventFilterStatus, EEventType } from "@/common/enums";
-import { Tabs, TabsList } from "@radix-ui/react-tabs";
 import { TabsTrigger } from "../ui/tabs";
-import type { TEventFilters } from "@/types";
 
 type TProps = {
   filters: TEventFilters;
@@ -20,7 +20,7 @@ type TProps = {
 
 export const EventFilters = ({ filters, onChange }: TProps) => {
   const handleClear = () =>
-    onChange({ search: "", type: "all", status: "all" });
+    onChange({ search: "", type: "all", status: EEventFilterStatus.UPCOMING });
 
   return (
     <div className="flex flex-col gap-4 mb-8 w-full">
@@ -66,17 +66,17 @@ export const EventFilters = ({ filters, onChange }: TProps) => {
           className="w-full"
         >
           <TabsList className="grid w-full grid-cols-3 md:w-100 h-9">
-            <TabsTrigger value="all">All Events</TabsTrigger>
             <TabsTrigger value={EEventFilterStatus.UPCOMING}>
               Upcoming
             </TabsTrigger>
             <TabsTrigger value={EEventFilterStatus.PAST}>Past</TabsTrigger>
+            <TabsTrigger value="all">All Events</TabsTrigger>
           </TabsList>
         </Tabs>
 
         {(filters.search ||
           filters.type !== "all" ||
-          filters.status !== "all") && (
+          filters.status !== EEventFilterStatus.UPCOMING) && (
           <Button variant="ghost" onClick={handleClear} className="gap-2">
             <X className="h-4 w-4" />
             Clear
