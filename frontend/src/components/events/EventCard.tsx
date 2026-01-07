@@ -8,14 +8,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Users, Link as LinkIcon, Clock } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Users,
+  Link as LinkIcon,
+  Clock,
+  Archive,
+} from "lucide-react";
 
 type TProps = {
   event: TEvent;
 };
 
 export const EventCard: FC<TProps> = ({ event }) => {
-  const date = new Date(event.date).toLocaleString("en-US", {
+  const eventDate = new Date(event.date);
+  const isPast = eventDate < new Date();
+
+  const date = eventDate.toLocaleString("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -26,14 +36,40 @@ export const EventCard: FC<TProps> = ({ event }) => {
   const isFull = event.attendeesIDs.length >= event.maxAttendees;
 
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-lg border-muted-foreground/20 pt-6 pb-0 gap-6">
-      <div className="h-2 bg-primary/80" />
+    <Card
+      className={`
+        overflow-hidden transition-all pt-6 pb-0 gap-6 border-muted-foreground/20
+        ${
+          isPast
+            ? "bg-muted/60 hover:bg-muted/80 opacity-90"
+            : "bg-card hover:shadow-lg"
+        }
+      `}
+    >
+      <div
+        className={`h-2 ${isPast ? "bg-muted-foreground/40" : "bg-primary/80"}`}
+      />
 
       <CardHeader>
         <div className="flex justify-between items-start">
-          <Badge variant="secondary" className="capitalize">
-            {event.type.toLowerCase()}
-          </Badge>
+          <div className="flex gap-2">
+            <Badge
+              variant={isPast ? "outline" : "secondary"}
+              className="capitalize"
+            >
+              {event.type.toLowerCase()}
+            </Badge>
+
+            {isPast && (
+              <Badge
+                variant="destructive"
+                className="flex items-center gap-1 opacity-70"
+              >
+                <Archive className="h-3 w-3" /> Ended
+              </Badge>
+            )}
+          </div>
+
           <div className="flex items-center text-xs text-muted-foreground">
             <Clock className="mr-1 h-3 w-3" />
             {new Date(event.createdAt).toLocaleDateString()}
@@ -44,7 +80,7 @@ export const EventCard: FC<TProps> = ({ event }) => {
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 grow">
         <p className="text-sm text-muted-foreground line-clamp-2">
           {event.description}
         </p>
@@ -86,11 +122,19 @@ export const EventCard: FC<TProps> = ({ event }) => {
           </span>
         </div>
 
-        {isFull ? (
+        {isPast && (
+          <span className="text-xs font-bold uppercase text-muted-foreground">
+            Event Ended
+          </span>
+        )}
+
+        {!isPast && isFull && (
           <span className="text-xs font-bold uppercase text-destructive">
             Event Full
           </span>
-        ) : (
+        )}
+
+        {!isPast && !isFull && (
           <span className="text-xs font-bold uppercase text-green-600">
             Spots Available
           </span>
