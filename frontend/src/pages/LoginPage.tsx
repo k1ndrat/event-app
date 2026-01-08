@@ -14,34 +14,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { getErrorMessage } from "@/lib/utils";
 import { GuestPaths } from "@/routes/GuestRoutes";
+import { loginFormSchema, type TLoginFormValues } from "@/schemas/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { useLogin } from "../hooks/useAuth";
-
-const formSchema = z.object({
-  email: z.email({ message: "Invalid email address" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters long" })
-    .max(128, { message: "Password is too long" }),
-});
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { mutate: login, isPending, isError, error } = useLogin();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<TLoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "haker0@ukr.net",
       password: "Qwerty321!",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: TLoginFormValues) => {
     login(values);
   };
 

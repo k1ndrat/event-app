@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useRegister } from "../hooks/useAuth";
+import { AlertMessage } from "@/components/AlertMessage";
+import { AuthFooter } from "@/components/auth/Footer";
+import { AuthHeader } from "@/components/auth/Header";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -14,30 +12,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import { GuestPaths } from "@/routes/GuestRoutes";
-import { AuthHeader } from "@/components/auth/Header";
-import { AuthFooter } from "@/components/auth/Footer";
-import { AlertMessage } from "@/components/AlertMessage";
-
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters long" })
-    .max(50, { message: "Name is too long" }),
-  email: z.email({ message: "Invalid email address" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters long" })
-    .max(128, { message: "Password is too long" }),
-});
+import {
+  signupFormSchema,
+  type TSignupFormValues,
+} from "@/schemas/signup.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useRegister } from "../hooks/useAuth";
 
 export const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { mutate: signup, isPending, isError, error } = useRegister();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<TSignupFormValues>({
+    resolver: zodResolver(signupFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -45,7 +36,7 @@ export const SignUpPage = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: TSignupFormValues) => {
     signup(values);
   };
 
