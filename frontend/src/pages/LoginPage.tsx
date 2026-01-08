@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useLogin } from "../hooks/useAuth";
+import { AlertMessage } from "@/components/AlertMessage";
+import { AuthFooter } from "@/components/auth/Footer";
+import { AuthHeader } from "@/components/auth/Header";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -14,11 +12,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
+import { getErrorMessage } from "@/lib/utils";
 import { GuestPaths } from "@/routes/GuestRoutes";
-import { AuthHeader } from "@/components/auth/Header";
-import { AuthFooter } from "@/components/auth/Footer";
-import { AlertMessage } from "@/components/AlertMessage";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { useLogin } from "../hooks/useAuth";
 
 const formSchema = z.object({
   email: z.email({ message: "Invalid email address" }),
@@ -44,12 +45,7 @@ export const LoginPage = () => {
     login(values);
   };
 
-  const errorMessage =
-    isError && error?.response?.data?.message
-      ? Array.isArray(error.response.data.message)
-        ? error.response.data.message.join(", ")
-        : error.response.data.message
-      : error?.message;
+  const errorMessage = getErrorMessage(error);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">

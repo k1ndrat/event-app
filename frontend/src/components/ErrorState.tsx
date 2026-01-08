@@ -1,8 +1,9 @@
-import type { FC } from "react";
+import { Button } from "@/components/ui/button";
+import { getErrorMessage } from "@/lib/utils";
+import type { TBackendErrorResponse } from "@/types";
 import type { AxiosError } from "axios";
 import { AlertCircle, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import type { TBackendErrorResponse } from "@/types";
+import type { FC } from "react";
 
 type TProps = {
   error: AxiosError<TBackendErrorResponse> | null;
@@ -10,9 +11,7 @@ type TProps = {
 };
 
 export const ErrorState: FC<TProps> = ({ error, reset }) => {
-  const errorMessage = Array.isArray(error?.response?.data?.message)
-    ? error?.response?.data?.message[0]
-    : error?.response?.data?.message || "An unexpected error occurred";
+  const errorMessage = getErrorMessage(error);
 
   const statusCode = error?.response?.status;
 

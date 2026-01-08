@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,6 +7,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Fragment, type FC } from "react";
+import { Link } from "react-router-dom";
 
 type TBreadcrumbStep = {
   title: string;
@@ -20,7 +20,7 @@ type TProps = {
 
 export const Breadcrumbs: FC<TProps> = ({ items }) => {
   return (
-    <Breadcrumb className="mb-1">
+    <Breadcrumb className="mb-2">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>

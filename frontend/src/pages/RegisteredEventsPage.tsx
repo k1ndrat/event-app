@@ -1,3 +1,4 @@
+import { defaultEventFilters } from "@/common/constants";
 import { EventFilters } from "@/components/events/EventFilters";
 import { EventList } from "@/components/events/EventList";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -8,11 +9,7 @@ import type { TEventFilters } from "@/types";
 import { useState } from "react";
 
 export const RegisteredEventsPage = () => {
-  const [filters, setFilters] = useState<TEventFilters>({
-    search: "",
-    type: "all",
-    status: "all",
-  });
+  const [filters, setFilters] = useState<TEventFilters>(defaultEventFilters);
 
   const debouncedSearch = useDebounce(filters.search, 500);
 
