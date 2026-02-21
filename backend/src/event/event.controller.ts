@@ -16,7 +16,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateEventDto } from './dto/create-event.dto';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { Types } from 'mongoose';
-import { IdValidationPipe } from 'src/pipes/id.validation.pipe';
+import { IdValidationPipe } from 'src/common/pipes/id.validation.pipe';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { GetEventsDto } from './dto/get-events.dto';
 
