@@ -1,4 +1,5 @@
 import { CreateEventPage } from "@/pages/CreateEventPage";
+import { EditEventPage } from "@/pages/EditEventPage";
 import { EventDetailsPage } from "@/pages/EventDetailsPage";
 import { MyEventsPage } from "@/pages/MyEventsPage";
 import { RegisteredEventsPage } from "@/pages/RegisteredEventsPage";
@@ -11,6 +12,7 @@ export enum EAdminRoutes {
   REGISTERED_EVENTS = "registered_events",
   EVENT_DETAILS = "event_details",
   CREATE_EVENT = "create_event",
+  EDIT_EVENT = "edit_event",
   SETTINGS = "settings",
 }
 
@@ -20,6 +22,7 @@ export const AdminPaths: Record<EAdminRoutes, string> = {
   [EAdminRoutes.REGISTERED_EVENTS]: "/registered-events",
   [EAdminRoutes.EVENT_DETAILS]: "/event/:id",
   [EAdminRoutes.CREATE_EVENT]: "/event/create",
+  [EAdminRoutes.EDIT_EVENT]: "/event/:id/edit",
   [EAdminRoutes.SETTINGS]: "/settings",
 };
 
@@ -43,6 +46,10 @@ export const AdminRoutes: Record<EAdminRoutes, TRoute> = {
   [EAdminRoutes.CREATE_EVENT]: {
     path: AdminPaths[EAdminRoutes.CREATE_EVENT],
     component: <CreateEventPage />,
+  },
+  [EAdminRoutes.EDIT_EVENT]: {
+    path: AdminPaths[EAdminRoutes.EDIT_EVENT],
+    component: <EditEventPage />,
   },
   [EAdminRoutes.SETTINGS]: {
     path: AdminPaths[EAdminRoutes.SETTINGS],

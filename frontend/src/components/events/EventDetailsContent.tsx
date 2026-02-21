@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import { AdminPaths } from "@/routes/AdminRoutes";
 import type { TBackendErrorResponse, TEvent } from "@/types";
 import type { AxiosError } from "axios";
 import type { FC } from "react";
@@ -171,7 +172,7 @@ export const EventDetailsContent: FC<TProps> = ({
               {isOrganizer && (
                 <>
                   <Button variant="outline" className="w-full" asChild>
-                    <Link to={`/events/edit/${event._id}`}>
+                    <Link to={AdminPaths.edit_event.replace(":id", event._id)}>
                       <Edit className="mr-2 h-4 w-4" /> Edit Event
                     </Link>
                   </Button>

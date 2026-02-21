@@ -26,7 +26,7 @@ export class UpdateEventDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(2)
-  @MaxLength(50)
+  @MaxLength(500)
   description: string;
 
   @IsOptional()

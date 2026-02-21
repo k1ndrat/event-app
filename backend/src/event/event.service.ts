@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { CreateEventDto } from './dto/create-event.dto';
-import { Event } from './schemas/event.schema';
-import { UpdateEventDto } from './dto/update-event.dto';
 import { EEventFilterStatus, EEventSortBy, EEventType } from 'src/common/enums';
+import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
+import { Event } from './schemas/event.schema';
 
 @Injectable()
 export class EventService {

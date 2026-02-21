@@ -4,15 +4,16 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import type { AxiosError } from "axios";
 import { eventService } from "../services/event.service";
 import type {
-  TGetEventsParams,
-  TCreateEventPayload,
   TBackendErrorResponse,
-  TEventsResponse,
+  TCreateEventPayload,
   TEvent,
+  TEventsResponse,
+  TGetEventsParams,
+  TUpdateEventPayload,
 } from "../types";
-import type { AxiosError } from "axios";
 
 export const useInfiniteEvents = (params: TGetEventsParams) => {
   return useInfiniteQuery<TEventsResponse, AxiosError<TBackendErrorResponse>>({
@@ -59,6 +60,22 @@ export const useCreateEvent = () => {
     mutationFn: (data) => eventService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+  });
+};
+
+export const useUpdateEvent = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    TEvent,
+    AxiosError<TBackendErrorResponse>,
+    { id: string; data: TUpdateEventPayload }
+  >({
+    mutationFn: ({ id, data }) => eventService.update(id, data),
+    onSuccess: (updatedEvent) => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["events", updatedEvent._id] });
     },
   });
 };
