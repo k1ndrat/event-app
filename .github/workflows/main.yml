@@ -8,36 +8,41 @@ on:
 
 jobs:
   # Перевірка Бекенду (NestJS)
-  backend-check:
+  backend:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./event-app-backend # Вкажіть шлях до папки бекенду
+        working-directory: . # Якщо package.json лежить в корені
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 # Копіює ваш код на сервер (без цього не буде файлів)
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '22' # Згідно з вашим package.json
           cache: 'pnpm'
-      - run: npm install -g pnpm
-      - run: pnpm install
-      - run: pnpm run lint
-      - run: pnpm run test
-      - run: pnpm run build
+
+      - name: Install & Check
+        run: |
+          npm install -g pnpm
+          pnpm install
+          pnpm run lint   # Перевірка стилю коду
+          pnpm run test   # Запуск юніт-тестів
+          pnpm run build  # Перевірка, чи збирається проєкт
 
   # Перевірка Фронтенду (React)
-  frontend-check:
+  frontend:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./react-app-folder # Вкажіть назву вашої папки з React
+        working-directory: ./react-folder # ПІДСТАВТЕ НАЗВУ ВАШОЇ ПАПКИ
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20' # Для React часто ставлять 20-ту (LTS)
+          node-version: '20'
           cache: 'pnpm'
-      - run: npm install -g pnpm
-      - run: pnpm install
-      - run: pnpm run lint # Переконайтеся, що в React є скрипт lint
-      - run: pnpm run build
+
+      - name: Install & Check
+        run: |
+          npm install -g pnpm
+          pnpm install
+          # Додайте команди, які є у вашому React package.json (наприклад: pnpm run build)
