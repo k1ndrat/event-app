@@ -1,0 +1,150 @@
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { getEventStatuses, getFormattedDate } from "@/lib/events";
+import { AdminPaths } from "@/routes/AdminRoutes";
+import type { TEvent } from "@/types";
+import {
+  Archive,
+  Calendar,
+  Clock,
+  Link as LinkIcon,
+  MapPin,
+  Users,
+} from "lucide-react";
+import type { FC } from "react";
+import { useNavigate } from "react-router-dom";
+
+type TProps = {
+  event: TEvent;
+};
+
+export const EventCard: FC<TProps> = ({ event }) => {
+  const navigate = useNavigate();
+
+  const formattedDate = getFormattedDate(event.date);
+  const { isFull, isPast } = getEventStatuses(event, null);
+
+  return (
+    <Card
+      className={`
+        overflow-hidden transition-all pt-6 pb-0 gap-6 border-muted-foreground/20
+        ${
+          isPast
+            ? "bg-muted/60 hover:bg-muted/80 opacity-90"
+            : "bg-card hover:shadow-lg"
+        }
+      `}
+      onClick={() =>
+        navigate(AdminPaths.event_details.replace(":id", event._id))
+      }
+    >
+      <div
+        className={`h-2 ${isPast ? "bg-muted-foreground/40" : "bg-primary/80"}`}
+      />
+
+      <CardHeader>
+        <div className="flex justify-between items-start">
+          <div className="flex gap-2">
+            <Badge
+              variant={isPast ? "outline" : "secondary"}
+              className="capitalize"
+            >
+              {event.type.toLowerCase()}
+            </Badge>
+
+            {isPast && (
+              <Badge
+                variant="destructive"
+                className="flex items-center gap-1 opacity-70"
+              >
+                <Archive className="h-3 w-3" /> Ended
+              </Badge>
+            )}
+          </div>
+
+          <div className="flex items-center text-xs text-muted-foreground">
+            <Clock className="mr-1 h-3 w-3" />
+            {new Date(event.createdAt).toLocaleDateString()}
+          </div>
+        </div>
+        <CardTitle className="text-xl font-bold leading-tight uppercase tracking-tight">
+          {event.name}
+        </CardTitle>
+      </CardHeader>
+
+      <CardContent className="space-y-4 grow">
+        <p className="text-sm text-muted-foreground line-clamp-2">
+          {event.description}
+        </p>
+
+        <div className="space-y-2">
+          <div className="flex items-center text-sm">
+            <Calendar className="mr-2 h-4 w-4 text-primary" />
+            <span
+              className={`${
+                isPast ? "line-through text-muted-foreground" : ""
+              }`}
+            >
+              {formattedDate}
+            </span>
+          </div>
+
+          {event.location && (
+            <div className="flex items-center text-sm text-muted-foreground">
+              <MapPin className="mr-2 h-4 w-4 text-primary" />
+              <span className="truncate">{event.location}</span>
+            </div>
+          )}
+
+          {event.link && (
+            <div className="flex items-center text-sm text-blue-500 hover:underline">
+              <LinkIcon className="mr-2 h-4 w-4" />
+              <a
+                href={event.link}
+                target="_blank"
+                rel="noreferrer"
+                className="truncate"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Link to the event
+              </a>
+            </div>
+          )}
+        </div>
+      </CardContent>
+
+      <CardFooter className="border-t bg-muted/30 py-6 flex justify-between items-center">
+        <div className="flex items-center text-sm font-medium">
+          <Users className="mr-2 h-4 w-4 opacity-70" />
+          <span className={isFull ? "text-destructive" : "text-foreground"}>
+            {event.attendeesIDs.length} / {event.maxAttendees}
+          </span>
+        </div>
+
+        {isPast && (
+          <span className="text-xs font-bold uppercase text-muted-foreground">
+            Event Ended
+          </span>
+        )}
+
+        {!isPast && isFull && (
+          <span className="text-xs font-bold uppercase text-destructive">
+            Event Full
+          </span>
+        )}
+
+        {!isPast && !isFull && (
+          <span className="text-xs font-bold uppercase text-green-600">
+            Spots Available
+          </span>
+        )}
+      </CardFooter>
+    </Card>
+  );
+};
